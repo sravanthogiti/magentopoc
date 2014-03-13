@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="MagentoPOC">
+    <global-element name="Magento" type="http://www.mulesoft.org/schema/mule/magento/config" entity-id="Magento#1">
+        <properties>
+            <property name="username" value="mulestoretest"/>
+            <property name="address" value="https://mulemagentoteststore.mygostore.co.uk/index.php/api/v2_soap/index/"/>
+            <property name="name" value="Magento"/>
+            <property name="password" value="muletest"/>
+            <property name="auxiliary;index" value="1"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/magento/connection-pooling-profile;0">
+                <property name="exhaustedAction" value="WHEN_EXHAUSTED_GROW"/>
+                <property name="isProcessed$$$$" value="true"/>
+                <property name="auxiliary;wrapIn" value="2"/>
+                <property name="auxiliary;index" value="2"/>
+                <property name="initialisationPolicy" value="INITIALISE_ONE"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="ShoppingCartFlow" entity-id="b2c14302-29dd-4c5f-832d-e739a9893415">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="3"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="8086"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="httpLabel"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="path" value="ShopingCart"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="auxiliary;index" value="4"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="Flow Reference" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="name" value="CreateProductFlow"/>
+                    <property name="auxiliary;index" value="5"/>
+                </properties>
+            </pattern>
+            <pattern name="Set Payload" type="http://www.mulesoft.org/schema/mule/core/set-payload" entity-id="Set Payload#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="value" value="payload is created #[message.payloadAs(java.lang.String)]"/>
+                    <property name="auxiliary;index" value="6"/>
+                </properties>
+            </pattern>
+        </lane>
+        <apikit>false</apikit>
+    </flow>
+    <flow SubFlow="true" name="CreateProductFlow" entity-id="29afb0de-0daa-4147-920f-3dd2c9cd0acf">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="7"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="CreateProduct" type="http://www.mulesoft.org/schema/mule/magento/magento-connector" entity-id="Magento#2">
+                <graphicalData x="19" y="300" width="108" height="74"/>
+                <properties>
+                    <property name="" value=""/>
+                    <property name="special_to_date" value=""/>
+                    <property name="special_from_date" value=""/>
+                    <property name="visibility" value="4"/>
+                    <property name="url_path" value=""/>
+                    <property name="auxiliary;erased;use_config_min_qty" value="true"/>
+                    <property name="storeViewIdOrCode" value="1"/>
+                    <property name="type" value="simple"/>
+                    <property name="password" value=""/>
+                    <property name="tier_price-ref" value=""/>
+                    <property name="username" value=""/>
+                    <property name="updated"/>
+                    <property name="description" value="iPadAir1Description"/>
+                    <property name="auxiliary;erased;notify_stock_qty" value="true"/>
+                    <property name="auxiliary;erased;min_qty" value="true"/>
+                    <property name="use_config_manage_stock" value=""/>
+                    <property name="auxiliary;erased;use_config_backorders" value="true"/>
+                    <property name="auxiliary;erased;is_in_stock" value="true"/>
+                    <property name="auxiliary;erased;use_config_max_sale_qty" value="true"/>
+                    <property name="config-ref" value="Magento"/>
+                    <property name="auxiliary;index" value="8"/>
+                    <property name="max_sale_qty" value=""/>
+                    <property name="auxiliary;erased;is_qty_decimal" value="true"/>
+                    <property name="gift_message_available" value=""/>
+                    <property name="status" value="1"/>
+                    <property name="use_config_min_qty" value=""/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/magento/create-product"/>
+                    <property name="auxiliary;erased;backorders" value="true"/>
+                    <property name="is_qty_decimal" value=""/>
+                    <property name="qty" value=""/>
+                    <property name="sku" value="Prduct17_sku"/>
+                    <property name="auxiliary;erased;min_sale_qty" value="true"/>
+                    <property name="meta_keyword" value=""/>
+                    <property name="use_config_max_sale_qty" value=""/>
+                    <property name="price" value="50000"/>
+                    <property name="auxiliary;erased;manage_stock" value="true"/>
+                    <property name="use_config_notify_stock_qty" value=""/>
+                    <property name="min_sale_qty" value=""/>
+                    <property name="custom_design" value=""/>
+                    <property name="complex" value="true"/>
+                    <property name="custom_layout_update" value=""/>
+                    <property name="weight" value="10"/>
+                    <property name="set" value="4"/>
+                    <property name="auxiliary;erased;use_config_manage_stock" value="true"/>
+                    <property name="auxiliary;erased;max_sale_qty" value="true"/>
+                    <property name="website_ids-ref" value=""/>
+                    <property name="short_description" value="iPadAir1ShortDescription"/>
+                    <property name="tax_class_id" value="1"/>
+                    <property name="options_container" value=""/>
+                    <property name="notify_stock_qty" value=""/>
+                    <property name="auxiliary;erased;use_config_notify_stock_qty" value="true"/>
+                    <property name="name" value="iPadAir1"/>
+                    <property name="url_key" value=""/>
+                    <property name="useReference" value="false"/>
+                    <property name="websites-ref" value=""/>
+                    <property name="additional_attributes-ref" value=""/>
+                    <property name="category_ids-ref" value=""/>
+                    <property name="min_qty" value=""/>
+                    <property name="manage_stock" value=""/>
+                    <property name="use_config_min_sale_qty" value=""/>
+                    <property name="auxiliary;erased;use_config_min_sale_qty" value="true"/>
+                    <property name="has_options" value=""/>
+                    <property name="special_price" value=""/>
+                    <property name="backorders" value=""/>
+                    <property name="ref" value=""/>
+                    <property name="meta_description" value=""/>
+                    <property name="categories-ref" value=""/>
+                    <property name="address" value=""/>
+                    <property name="use_config_backorders" value=""/>
+                    <property name="meta_title" value=""/>
+                    <property name="is_in_stock" value=""/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/magento/attributes;932574053">
+                        <property name="special_to_date" value=""/>
+                        <property name="special_from_date" value=""/>
+                        <property name="visibility" value="4"/>
+                        <property name="url_path" value=""/>
+                        <property name="auxiliary;erased;use_config_min_qty" value="true"/>
+                        <property name="tier_price-ref" value=""/>
+                        <property name="description" value="iPadAir1Description"/>
+                        <property name="auxiliary;erased;notify_stock_qty" value="true"/>
+                        <property name="auxiliary;erased;min_qty" value="true"/>
+                        <property name="use_config_manage_stock" value=""/>
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="auxiliary;erased;use_config_backorders" value="true"/>
+                        <property name="auxiliary;erased;is_in_stock" value="true"/>
+                        <property name="auxiliary;erased;use_config_max_sale_qty" value="true"/>
+                        <property name="auxiliary;index" value="9"/>
+                        <property name="max_sale_qty" value=""/>
+                        <property name="auxiliary;erased;is_qty_decimal" value="true"/>
+                        <property name="gift_message_available" value=""/>
+                        <property name="status" value="1"/>
+                        <property name="use_config_min_qty" value=""/>
+                        <property name="auxiliary;erased;backorders" value="true"/>
+                        <property name="is_qty_decimal" value=""/>
+                        <property name="qty" value=""/>
+                        <property name="auxiliary;erased;min_sale_qty" value="true"/>
+                        <property name="meta_keyword" value=""/>
+                        <property name="use_config_max_sale_qty" value=""/>
+                        <property name="price" value="50000"/>
+                        <property name="auxiliary;erased;manage_stock" value="true"/>
+                        <property name="use_config_notify_stock_qty" value=""/>
+                        <property name="min_sale_qty" value=""/>
+                        <property name="custom_design" value=""/>
+                        <property name="complex" value="true"/>
+                        <property name="custom_layout_update" value=""/>
+                        <property name="weight" value="10"/>
+                        <property name="auxiliary;erased;use_config_manage_stock" value="true"/>
+                        <property name="auxiliary;erased;max_sale_qty" value="true"/>
+                        <property name="website_ids-ref" value=""/>
+                        <property name="short_description" value="iPadAir1ShortDescription"/>
+                        <property name="tax_class_id" value="1"/>
+                        <property name="options_container" value=""/>
+                        <property name="notify_stock_qty" value=""/>
+                        <property name="auxiliary;erased;use_config_notify_stock_qty" value="true"/>
+                        <property name="name" value="iPadAir1"/>
+                        <property name="url_key" value=""/>
+                        <property name="useReference" value="false"/>
+                        <property name="websites-ref" value=""/>
+                        <property name="additional_attributes-ref" value=""/>
+                        <property name="manage_stock" value=""/>
+                        <property name="category_ids-ref" value=""/>
+                        <property name="min_qty" value=""/>
+                        <property name="use_config_min_sale_qty" value=""/>
+                        <property name="auxiliary;erased;use_config_min_sale_qty" value="true"/>
+                        <property name="has_options" value=""/>
+                        <property name="special_price" value=""/>
+                        <property name="backorders" value=""/>
+                        <property name="ref" value=""/>
+                        <property name="meta_description" value=""/>
+                        <property name="categories-ref" value=""/>
+                        <property name="use_config_backorders" value=""/>
+                        <property name="meta_title" value=""/>
+                        <property name="is_in_stock" value=""/>
+                        <property-collection name="@http://www.mulesoft.org/schema/mule/magento/stock_data;1814178937">
+                            <property name="complex" value="false"/>
+                            <property name="auxiliary;erased;use_config_min_qty" value="true"/>
+                            <property name="auxiliary;erased;max_sale_qty" value="true"/>
+                            <property name="auxiliary;erased;use_config_manage_stock" value="true"/>
+                            <property name="notify_stock_qty" value=""/>
+                            <property name="auxiliary;erased;notify_stock_qty" value="true"/>
+                            <property name="auxiliary;erased;use_config_notify_stock_qty" value="true"/>
+                            <property name="auxiliary;erased;min_qty" value="true"/>
+                            <property name="use_config_manage_stock" value=""/>
+                            <property name="isProcessed$$$$" value="true"/>
+                            <property name="auxiliary;erased;is_in_stock" value="true"/>
+                            <property name="auxiliary;erased;use_config_backorders" value="true"/>
+                            <property name="auxiliary;erased;use_config_max_sale_qty" value="true"/>
+                            <property name="useReference" value="false"/>
+                            <property name="max_sale_qty" value=""/>
+                            <property name="auxiliary;erased;is_qty_decimal" value="true"/>
+                            <property name="min_qty" value=""/>
+                            <property name="manage_stock" value=""/>
+                            <property name="use_config_min_qty" value=""/>
+                            <property name="use_config_min_sale_qty" value=""/>
+                            <property name="auxiliary;erased;backorders" value="true"/>
+                            <property name="qty" value=""/>
+                            <property name="auxiliary;erased;use_config_min_sale_qty" value="true"/>
+                            <property name="is_qty_decimal" value=""/>
+                            <property name="auxiliary;erased;min_sale_qty" value="true"/>
+                            <property name="use_config_max_sale_qty" value=""/>
+                            <property name="backorders" value=""/>
+                            <property name="ref" value=""/>
+                            <property name="auxiliary;erased;manage_stock" value="true"/>
+                            <property name="use_config_backorders" value=""/>
+                            <property name="use_config_notify_stock_qty" value=""/>
+                            <property name="is_in_stock" value=""/>
+                            <property name="min_sale_qty" value=""/>
+                        </property-collection>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/magento/create-product-additional-attributess;1436452965">
+                        <property name="ref" value=""/>
+                        <property name="isProcessed$$$$" value="true"/>
+                    </property-collection>
+                </properties>
+                <description></description>
+            </pattern>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#1">
+                <graphicalData x="187" y="300" width="68" height="74"/>
+                <properties>
+                    <property name="message" value="#[payload]"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="10"/>
+                </properties>
+            </pattern>
+            <pattern name="Object to String" type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" entity-id="Object to String#1">
+                <graphicalData x="315" y="300" width="119" height="74"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="11"/>
+                </properties>
+            </pattern>
+            <pattern name="Property" type="http://www.mulesoft.org/schema/mule/core/properties-transformer" entity-id="Property#1">
+                <graphicalData x="494" y="300" width="70" height="74"/>
+                <properties>
+                    <property name="propertyName" value="prodId"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-property"/>
+                    <property name="value" value="#[payload]"/>
+                    <property name="auxiliary;index" value="12"/>
+                </properties>
+            </pattern>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#2">
+                <graphicalData x="624" y="300" width="68" height="74"/>
+                <properties>
+                    <property name="message" value="#[message.outboundProperties['prodId']]"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="13"/>
+                </properties>
+            </pattern>
+            <pattern name="UpdateInventoryStock" type="http://www.mulesoft.org/schema/mule/magento/magento-connector" entity-id="Magento#3">
+                <graphicalData x="752" y="300" width="160" height="74"/>
+                <properties>
+                    <property name=""/>
+                    <property name="username"/>
+                    <property name="productIdOrSku"/>
+                    <property name="address"/>
+                    <property name="productSku"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/magento/update-inventory-stock-item"/>
+                    <property name="config-ref" value="Magento"/>
+                    <property name="password"/>
+                    <property name="auxiliary;index" value="14"/>
+                    <property name="productId" value="#[message.outboundProperties['prodId']]"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/magento/catalog-inventory-stock-item;0">
+                        <property name="manage_stock" value="1"/>
+                        <property name="use_config_min_sale_qty" value="0"/>
+                        <property name="use_config_min_qty" value="0"/>
+                        <property name="use_config_manage_stock" value="0"/>
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="qty" value="10"/>
+                        <property name="is_in_stock" value="1"/>
+                        <property name="auxiliary;wrapIn" value="15"/>
+                        <property name="auxiliary;index" value="15"/>
+                        <property name="use_config_max_sale_qty" value="0"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+        </lane>
+        <apikit>false</apikit>
+    </flow>
+    <description></description>
+</mule-configuration>

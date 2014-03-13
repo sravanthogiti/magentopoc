@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:magento="http://www.mulesoft.org/schema/mule/magento" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/magento http://www.mulesoft.org/schema/mule/magento/current/mule-magento.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+     <magento:config name="Magento" username="mulestoretest" password="muletest" address="https://mulemagentoteststore.mygostore.co.uk/index.php/api/v2_soap/index/" doc:name="Magento">
+       <magento:connection-pooling-profile initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW"/>
+    </magento:config>
+    <flow name="ShoppingCartFlow" doc:name="ShoppingCartFlow">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8086" doc:name="HTTP" path="ShopingCart"/>
+        <flow-ref name="CreateProductFlow" doc:name="Flow Reference"/>
+        <set-payload doc:name="Set Payload" value="payload is created #[message.payloadAs(java.lang.String)]"/>
+    </flow>
+    <sub-flow name="CreateProductFlow" doc:name="CreateProductFlow">
+        <magento:create-product config-ref="Magento"  doc:name="CreateProduct" set="4" sku="Prduct17_sku" storeViewIdOrCode="1" type="simple">
+            <magento:attributes name="iPadAir1" description="iPadAir1Description" short_description="iPadAir1ShortDescription" weight="10" status="1" visibility="4" price="50000" tax_class_id="1"/>
+        </magento:create-product>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <object-to-string-transformer doc:name="Object to String"/>
+        <set-property doc:name="Property" propertyName="prodId" value="#[payload]"/>
+        <logger message="#[message.outboundProperties['prodId']]" level="INFO" doc:name="Logger"/>
+        <magento:update-inventory-stock-item config-ref="Magento"  doc:name="UpdateInventoryStock" productId="#[message.outboundProperties['prodId']]">
+            <magento:catalog-inventory-stock-item is_in_stock="1" manage_stock="1" qty="10" use_config_manage_stock="0" use_config_max_sale_qty="0" use_config_min_qty="0" use_config_min_sale_qty="0"/>
+        </magento:update-inventory-stock-item>
+
+    </sub-flow>
+</mule>
+
